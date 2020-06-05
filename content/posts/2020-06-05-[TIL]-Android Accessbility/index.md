@@ -13,7 +13,7 @@ excerpt: 우아한 형제들의 Android Accessibility 적용 방식에 대한 �
 - contentDescription 은 눈으로 읽히는 모든 정보를 음성으로 읽어줄 수 있는 대체 텍스트를 표현 한다
 - Button 과 ClickListner 가 붙은 ImageView 에는 "ㅇㅇ 버튼" 이라고 읽어준다
 
-~~~ xml
+~~~xml
 <!-- for example -->
 <ImageView
     android:id="@+id/userPhotoImageView"
@@ -26,7 +26,7 @@ excerpt: 우아한 형제들의 Android Accessibility 적용 방식에 대한 �
 ## 2. 상세히 설명하기
 - AccessibilityNodeInfoCompat (api level 22 부터 지원) 사용하기
 - **hintScript** 를 통해 원하는 내용을 변경
-~~~ kotlin
+~~~kotlin
 fun setAccessibilityClickActionHintScript(view: View, hintScript: String?) {
     if (isTalkbackOn) {
         view.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
