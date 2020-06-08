@@ -50,15 +50,5 @@ module.exports = {
       options: {
       },
     },
-    {
-      resolve: `gatsby-transformer-remark`,
-      options: {
-        plugins: [
-          {
-            resolve: `gatsby-remark-highlight-code`
-          },
-        ],
-      },
-    },
   ],
 };
