@@ -5,7 +5,7 @@ module.exports = {
     siteUrl: `https://reno-blog.netlify.app/`,
     description: `This is Reno's blog. I'm Android Developer. I love LOL, Cooking, Riding a electric kickboard. I want to make an app that makes the world fun!!`,
     hero: {
-      heading: `Welcome to Reno Blog !!`,
+      heading: `Welcome to Reno's Blog`,
       maxWidth: 652,
     },
     social: [
