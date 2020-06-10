@@ -2,7 +2,7 @@
 title: Android Accessibility 
 author: Reno Kim
 date: 2020-06-05
-hero: ./images/Android Accessibility.png
+hero: ./images/hero.png
 excerpt: 우아한 형제들의 Android Accessibility 적용 방식에 대한 글을 간단히 요약
 ---
 
