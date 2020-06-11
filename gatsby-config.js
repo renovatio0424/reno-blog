@@ -16,6 +16,10 @@ module.exports = {
       {
         name: `linkedin`,
         url: `https://www.linkedin.com/in/정원-김-33b30415a`,
+      },
+      {
+        name: `mailto`,
+        url: `mailto:renovatio0424@gmail.com`,
       }
     ],
   },
