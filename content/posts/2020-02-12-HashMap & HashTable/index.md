@@ -6,68 +6,61 @@ hero: ./images/hero.jpg
 excerpt: HashMap 과 HashTable 스터디하면서 정리한 글
 ---
 
-# HashMap & HashTable 	[(video)](https://img.youtube.com/vi/KyUTuwz_b7Q/0.jpg)
+# HashMap & HashTable [(참고했던 영상)](https://img.youtube.com/vi/KyUTuwz_b7Q/0.jpg)
 
 [![Reference](https://img.youtube.com/vi/KyUTuwz_b7Q/0.jpg)](https://www.youtube.com/watch?v=KyUTuwz_b7Q)
 
-## 1. Hash Table
-	찾는 순서
-	1. 배열에 특정 값을 저장한다
-	2. 찾고자하는 값으로 계산하여 해당 값이 저장되어 있는 인덱스를 알아낸다
-	3. 계산한 인덱스에서 값을 리턴한다
-	=> 원하는 값을 가장 빠르게 찾는 방법
+## Hashing Algorithm
 
+**Hash** 란 해쉬 함수를 사용해 입력된 값을 계산해 해쉬값을 만드는 것을 말한다. 
 
-example) 
-
-|  |  |  |  | Mia |  |  |  |  |  |  |
-|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-
+___즉, 해쉬 값을 해쉬 함수를 통해 알게 된 임의의 값을 통해 원래 값을 찾을 수 있다.___  
+ 
+예를 들어서 Mia 라는 값을 맵에서 찾고 싶을 때
+기존 Map 에서는 Mia 가 있는 Key 를 알아야만 Mia 를 찾을 수 있다.
+하지만 해쉬맵을 사용한다면 Mia 의 해쉬값을 통해 바로 맵에서 Mia 를 찾을 수 있다. 
+아래처럼 말이다. 
+	
 	1. Mia 를 찾고 싶다
-	2. Mia 의 해쉬값을 찾는다
+    2. Mia 의 해쉬값을 찾는다
+    
+    	M = 77
+    	i = 105
+    	a = 97 
+    	total = M + i + a = 279 
+    	hash = 279 % 11 = 4
+    
+    3. hash 값으로 원하는 값을 입력 또는 찾는다
 
-	M = 77
-	i = 105
-	a = 97 
-	total = M + i + a = 279 
-	hash = 279 % 11 = 4
+## Collisions 이란? 
+
+___하지만 해쉬값이 같지만 값이 다른 경우에는 어떻게 될까?___
+
+ 이런 경우를 Collisions 이라 하며 
+Collision 이 발생하는 비율을 **Load Factor** (저장된 아이템의 총 갯수 / 배열의 크기 => load factor 가 작을 수록 효율이 좋다)라 한다
+당연히 collision 이 없는 경우를 **Best Case**, 
+collision 이 많은 경우를 **Worst Case** 라 한다.
 	
-	3. hash 값으로 원하는 값을 입력 또는 찾는다
+## Collision 해결법
 
-## 2. Hashing Algorithm
-
-	- key 값을 주소로 바꿔주는 계산
-	- 숫자로 된 키값은 가용한 메모리 만큼 나누고 나머지를 사용한다.
-	- 알파벳으로 된 키값은 아스키 코드의 합을 가용 메모리 만큼 나누고 나머지를 사용한다. 
-	- Folding method 는 키를 같은 부분으로 값들의 합을 나누고 나머지를 사용한다. 
-
-	ex) 01452 8345654
-	-> 01 + 45 + 28 + 34 + 56 + 54 = 218
-
-## 3. Collisions
-: 같은 인덱스에 다른 값이 들어가야 되는 경우
-
-	1. Load Factor = 저장된 아이템의 총 갯수 / 배열의 크기 => load factor 가 작을 수록 효율이 좋다
-	2. best case = collision 이 없는 경우 
-	3. worst case = collision 이 많은 경우
+- Open Addressing
+    - Linear probing
+	- plus 3 rehash
+	- quadratic probing (failed attempt)^2
+	- Double hashing 
+- Closed Addressing
 	
-## 4. Collision 해결법
-	- Open Addressing
-		- Linear probing
-		- plus 3 rehash
-		- quadratic probing (failed attempt)^2
-		- Double hashing 
-	- Closed Addressing
+## 해쉬 함수의 요구 사항
+
+- collision 최소화
+- 일정하게 분배된 해쉬 값
+- 쉬운 계산
+- 어떤 collision 이든 해결이 되어야함
 	
-## 5. 해쉬 함수의 요구 사항
-	- collision 최소화
-	- 일정하게 분배된 해쉬 값
-	- 쉬운 계산
-	- 어떤 collision 이든 해결이 되어야함
-	
-## 6. Summary
-	- 많은 양의 데이터를 인덱싱할 때 사용
-	- 각 키들에 대한 주소는 키에 의해 계산된다
-	- Collision 은 open or closed addressing 을 통해 해결 할 수 있다. 
-	- 해싱은 데이터베이스 인덱싱, 컴파일러, 캐싱, 비밀번호 인증 등등 에서 사용된다. 
-	- 삽입, 삭제, 제거 가 같은 시간 안에 처리된다. (데이터가 많든 적든)
+## Summary
+
+- 많은 양의 데이터를 인덱싱할 때 사용
+- 각 키들에 대한 주소는 키에 의해 계산된다
+- Collision 은 open or closed addressing 을 통해 해결 할 수 있다. 
+- 해싱은 데이터베이스 인덱싱, 컴파일러, 캐싱, 비밀번호 인증 등등 에서 사용된다. 
+- 삽입, 삭제, 제거 가 같은 시간 안에 처리된다. (데이터가 많든 적든)
