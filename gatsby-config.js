@@ -55,6 +55,7 @@ module.exports = {
       options: {
         // replace "UA-XXXXXXXXX-X" with your own Tracking ID
         trackingId: "UA-138534248-2",
+        header:true
       },
     },
     {
