@@ -3,7 +3,7 @@ title: The First Class Collection (일급 콜렉션)
 author: Reno Kim
 date: 2020-06-17
 hero: ./images/hero.jpeg
-excerpt: 업무하면서 일급 컬렉션에 대해 공부한 내용을 정리하였습니다 
+excerpt: 일급 컬렉션에 대해 공부한 내용을 정리하였습니다 
 ---
 
 최근에 기능 개발하면서 실수했던 이야기에 대해서 공유해보려고 한다 ㅠㅠ
