@@ -22,7 +22,7 @@ collections:
       - { label: "Author", name: "author", widget: "relation", collection: "authors", valueField: "name", searchFields: ["name"] }
       - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", dateFormat: "YYYY-MM-DD", timeFormat: false }
       - { label: "Excerpt", name: "excerpt", widget: "string", required: false }
-      - { label: "Hero", name: "images", widget: "image" }
+      - { label: "Hero", name: "hero", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
   - name: "authors"
     label: "Authors"
