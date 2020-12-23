@@ -1,3 +1,11 @@
+---
+title: Virtual Memory (Linux 가상 메모리)
+author: Reno Kim
+date: 2020-06-17
+hero: ./images/hero.jpg
+excerpt: 가상 메모리에 대해서 공부한 내용을 정리하였습니다. 
+---
+
 # Virtual Memory (OS)
 
 Question Type: Common
