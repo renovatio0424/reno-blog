@@ -1,3 +1,10 @@
+---
+title: Garbage Collection (가비지 컬렉션)
+author: Reno Kim
+date: 2020-12-23
+hero: ./images/hero.jpg
+excerpt: 가비지 컬렉션에 대해 공부한 내용을 정리하였습니다.
+---
 # Garbage Collection (Memory)
 
 ## JVM 이란?
