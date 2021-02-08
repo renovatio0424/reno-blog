@@ -1,28 +1,24 @@
 ---
-title: suspend 를 붙이면 생기는 일 (feat. Coroutine - under the hood)
+title: suspend 를 붙이면 생기는 일 (feat. 코루틴 동작 원리)
 author: Reno Kim
-date: 2020-02-09
+date: 2021-02-09
 hero: ./images/hero.jpg
 excerpt: 코루틴의 작동 원리에 대해 공부하면서 정리한 글입니다.
 ---
-# suspend 를 붙이면 생기는 일 (feat. Coroutine - under the hood)
+# suspend 를 붙이면 생기는 일 (feat. 코루틴 동작 원리)
 
-# Reference
+## 시작하기 앞서
 
-[The suspend modifier - under the hood](https://manuelvivo.dev/suspend-modifier)
-
-# 시작하기 앞서
-
-- 이 글은 "coroutine 이 실제로 동작하는 원리"에 대해 공부하면서 학습한 내용을 쉽게 이해할 수 있도록 쓴 글입니다.
+- 이 글은 **"coroutine 이 실제로 동작하는 원리"**에 대해 공부하면서 학습한 내용을 쉽게 이해할 수 있도록 쓴 글입니다.
 - 이해를 돕기 위해 예제 코드가 실제 코드와 다를 수 있습니다.
 
-# `suspend` 를 붙이면 어떻게 될까?
+## 'suspend' 를 붙이면 어떻게 될까?
 
-Coroutine 소개 글이나 영상을 보다 보면 항상 하는 얘기 중 하나가
+Coroutine 소개 글이나 영상을 보다 보면 항상 언급하는 코루틴의 장점이 하나 있다.
 
-"**Callback** 을 없애 **Imperative code** 를 만들어 준다" 이다.
+"**Callback** 을 없애 **Imperative code** 를 만들어 준다" 는 것이다.
 
-예시로 아래 코드가
+콜백 지옥이었던 코드가
 
 ```kotlin
 // Simplified code that only considers the happy path
@@ -38,7 +34,7 @@ fun loginUser(userId: String, password: String, userResult: Callback<User>) {
 }
 ```
 
-이 코드로 바뀌는 마법을 볼 수 있다.
+깔끔한 코드로 바뀌는 마법을 볼 수 있다.
 
 ```kotlin
 suspend fun loginUser(userId: String, password: String): User {
@@ -48,17 +44,15 @@ suspend fun loginUser(userId: String, password: String): User {
 }
 ```
 
-그렇다면 Callback 을 사용하지 않는 것일까? 
+그렇다면 Coroutine은 **Callback** 을 사용하지 않는 것일까? 
 
-실제로 내부적으로는 Callback 을 사용하고 있다. 
+결론부터 말하자면 실제로 내부적으로는 **Callback** 을 사용하고 있다. 
 
-이를 위해서 `State Machine` 사용한다. (나중에 자세히 다루겠다)
+단지 개발자가 직접 콜백을 구현하는 것이 아닌 컴파일러가 구현하는 것이다.
 
-## `Continuation`
+### Continuation
 
-State Machine은 `Continuation` 을 통해 콜백과 콜백에 사용되는 정보들을 공유하는데 
-
-아래와 같이 정의되어 있다.
+ Coroutine은 `Continuation` 을 통해 콜백과 콜백에 사용되는 정보들을 공유하는데 아래와 같이 정의되어 있다.
 
 ```kotlin
 interface Continuation<in T> {
@@ -67,10 +61,10 @@ interface Continuation<in T> {
 }
 ```
 
-- `context` : `Continuation` 에서 사용될 `CoroutineContext` 를 의미하고
-- `resumeWith` : `Result` 와 함께 Coroutine 을 재실행하는데, `Result` 값에는 Exception 또는 처리된 값이다.
+- **`context`** : `Continuation` 에서 사용될 `CoroutineContext` 를 의미하고
+- **`resumeWith`** : `Result` 와 함께 Coroutine 을 재실행하는데, `Result` 값에는 Exception 또는 처리된 값이다.
 
-이 Continuation 을 사용해 컴파일러는 다음과 같은 코드를 만들어 낸다
+이 **Continuation** 을 사용해 컴파일러는 다음과 같은 코드를 만들어 낸다
 
 ```kotlin
 fun loginUser(userId: String, password: String, completion: Continuation<Any?>) {
@@ -82,18 +76,18 @@ fun loginUser(userId: String, password: String, completion: Continuation<Any?>) 
 
 컴파일러가 만들어낸 코드는
 
-1. `suspend` 지시어가 사라졌다.
-2. 함수 파라미터에 `completion: Continuation<Any?>` 가 추가 되었다.
+1. **`suspend`** 지시어가 사라졌다.
+2. 함수 파라미터에 **`completion: Continuation<Any?>`** 가 추가 되었다.
 3. return 값이 사라졌다
-4. code block 마지막에 `completion.resume(userDb)` 가 생겼다. 
+4. code block 마지막에 **`completion.resume(userDb)`** 가 생겼다. 
 
-아까 얘기 했던 대로 `completion` 을 통해 결과 값을 전달하게 된다 
+아까 얘기 했던 대로 **`completion`** 을 통해 결과 값을 전달하게 된다 
 
-하지만 눈치 빠른 누군가는 왜 `completion` 의 타입이 `Continuation<Any?>` 인지 궁금할 것이다.
+하지만 눈치 빠른 누군가는 왜 **`completion`** 의 타입이 **`Continuation<Any?>`** 인지 궁금할 것이다.
 
 이 내용은 나중에 설명하도록 하겠다.
 
-## State Machine
+### State Machine
 
 `loginUser` 가 하나의 스레드에서 동작한다면 여기서 끝날 것이다. 
 
@@ -101,11 +95,12 @@ fun loginUser(userId: String, password: String, completion: Continuation<Any?>) 
 
 어떻게 각 작업이 끝나고 다음 작업이 시작해야하는 상태를 관리할까?
 
-그것을 관리하는 것이 State Machine이다.
+그것을 관리하는 것이 **State Machine**이다.
 
-컴파일러는 각각의 작업에 Label 을 붙여 처리해야할 작업을 나누고 
+우선 컴파일러는 
+1. 각각의 작업에 Label 을 붙여 처리해야할 작업을 나누고 
 
-Label 통해 다음 해야할 작업을 지시한다. 
+2. Label 통해 다음 해야할 작업을 지시한다. 
 
 ```kotlin
 fun loginUser(userId: String, password: String, completion: Continuation<Any?>) {
@@ -213,7 +208,11 @@ fun loginUser(userId: String?, password: String?, completion: Continuation<Any?>
 
 이러한 프로세스가 Recursive하게 일어난다고 보시면 됩니다. 
 
-# 결론
+## 결론
 
 1. `suspend` 지시어를 붙이게 되면 컴파일러가 Callback 을 생성한다
 2. Callback시 필요한 정보와 상태 관리는 **State Machine** 에 의해 관리된다.
+
+## Reference
+
+[The suspend modifier - under the hood](https://manuelvivo.dev/suspend-modifier)
